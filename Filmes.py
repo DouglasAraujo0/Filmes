@@ -2,6 +2,31 @@
 import pwinput
 import oracledb
 
+def cadastrar():
+    try:
+        print("-----------------Cadastrar Filme-----------------")
+
+        # Recebe valores para o cadastro
+        genero = input("Gênero: ")
+        nome = input("Nome: ")
+        dt_lancamento = input("Data de Lançamento (dd/mm/aaaa): ") 
+        duracao = int(input("Duração: "))
+
+        # Monta a instrução SQL de cadastro em uma string
+        cadastro = f"""INSERT INTO FILMES (GENERO_FILME, NOME_FILME, DT_LANCAMENTO, DURACAO) VALUES ('{genero}', '{nome}', TO_DATE('{dt_lancamento}', 'YYYY-MM-DD'), {duracao})"""
+
+        # Executa e grava o registro na tabela
+        cursor.execute(cadastro)
+        conn.commit()
+    except ValueError:
+        print("Valor inválido.")
+    except Exception as erro:
+        print(f"Erro: {erro}")
+    else:
+        print("Filme cadastrado com sucesso.")
+        input("Pressione Enter para continuar...") 
+
+
 # Tentativa de Conexão com o Banco de Dados
 
 try:
@@ -19,7 +44,6 @@ except Exception as erro:
     conexao = False    # Flag para não executar a Aplicação
 else:
     conexao = True    # Flag para executar a Aplicação
-
 
 
 # Enquanto a flag conexao estiver True, a aplicação será executada
