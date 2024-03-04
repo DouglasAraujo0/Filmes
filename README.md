@@ -23,7 +23,7 @@ pip install pwinput
     NOME_FILME VARCHAR2(255) NOT NULL,
     DURACAO NUMBER,
     SINOPSE VARCHAR2(200)
-);
+    );
 
 
 4 - Entrar no programa com as mesmas permissões do SQL Developer
