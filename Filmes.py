@@ -27,6 +27,40 @@ def cadastrar():
         input("Pressione Enter para continuar...") 
 
 
+def listar():
+    try:
+        print("-----------------Listar Filme-----------------")
+
+        # Lista para captura de dados do Banco 
+        lista_dados = []
+
+        # Monta a instrução SQL de consulta 
+        consulta = f"""SELECT * FROM FILMES"""
+
+        # Captura os registros da tabela
+        cursor.execute(consulta)
+        data = cursor.fetchall()
+
+        # Adiciona os registros na lista
+        for dt in data:
+            lista_dados.append(dt)
+
+        # Ordena a lista
+        lista_dados = sorted(lista_dados)
+
+        #Verifica se há filmes cadastrados
+        if len(lista_dados) == 0:
+            print("Nenhum filme cadastrado.")
+        else:
+            # Exibe os registros
+            for item in lista_dados:
+                print(item)
+    except:
+        print("Erro ao listar filmes.")
+    else:
+        input("Pressione Enter para continuar...")
+
+
 # Tentativa de Conexão com o Banco de Dados
 
 try:
