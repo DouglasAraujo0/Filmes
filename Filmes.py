@@ -2,6 +2,16 @@
 import pwinput
 import oracledb
 
+def obter_duracao():
+    while True:
+        try:
+            duracao = int(input("Duração: (em minutos) "))
+            if 0 < duracao <= 250:
+                return duracao
+            else:
+                print("Por favor, insira um valor válido para a duração (entre 1 e 250 minutos).")
+        except ValueError:
+            print("Por favor, insira um valor inteiro válido.")
 def cadastrar():
 
     try:
@@ -10,11 +20,11 @@ def cadastrar():
         # Recebe valores para o cadastro
         genero = input("Gênero: ")
         nome = input("Nome: ")
-        dt_lancamento = input("Data de Lançamento (dd/mm/aaaa): ") 
-        duracao = int(input("Duração: "))
+        duracao = obter_duracao()
+        sinopse = input("Sinopse: ")
 
         # Monta a instrução SQL de cadastro em uma string
-        cadastro = f"""INSERT INTO FILMES (GENERO_FILME, NOME_FILME, DT_LANCAMENTO, DURACAO) VALUES ('{genero}', '{nome}', TO_DATE('{dt_lancamento}', 'YYYY-MM-DD'), {duracao})"""
+        cadastro = f"""INSERT INTO FILMES (GENERO_FILME, NOME_FILME, DURACAO, SINOPSE) VALUES ('{genero}', '{nome}', '{duracao}', '{sinopse}')"""
 
         # Executa e grava o registro na tabela
         cursor.execute(cadastro)
@@ -75,7 +85,7 @@ def atualizar():
         id_filme = int(input("Informe o ID do Filme: "))
 
         # Constroi a instrução de consulta para verificar se o filme existe
-        consulta = f"""SELECT * FROM FILMES WHERE ID_FILME = {id_filme}"""
+        consulta = f"""SELECT * FROM FILMES WHERE ID = {id_filme}"""
 
         # Captura os registros da tabela
         cursor.execute(consulta)
@@ -92,15 +102,15 @@ def atualizar():
                 # Captura os novos valores para atualização
                 genero_novo = input("Digite um novo gênero: ")
                 nome_novo = input("Digite um novo nome: ")
-                dt_lancamento_novo = input("Digite uma nova data de lançamento (dd/mm/aaaa): ")
                 duracao_novo = int(input("Digite uma nova duração: "))
+                sinopse_nova = input("Digite uma nova sinopse: ")
 
                 # Constroi a instrução de atualização
                 atualizacao = f"""UPDATE FILMES SET 
                 GENERO_FILME = '{genero_novo}',
                 NOME_FILME = '{nome_novo}',
-                DT_LANCAMENTO = TO_DATE('{dt_lancamento_novo}', 'YYYY-MM-DD'),
-                DURACAO = {duracao_novo} WHERE ID_FILME = {id_filme}"""
+                DURACAO = {duracao_novo},
+                SINOPSE = '{sinopse_nova}' WHERE ID = {id_filme}"""
 
                 # Executa a atualização
                 cursor.execute(atualizacao)
@@ -126,26 +136,11 @@ def excluir():
         id_filme = int(input("Informe o ID do Filme: "))
 
         # Constroi a instrução de exclusão
-        exclusao = f"""DELETE FROM FILMES WHERE ID_FILME = {id_filme}"""
+        exclusao = f"""DELETE FROM FILMES WHERE ID = {id_filme}"""
 
         # Executa a exclusão
         cursor.execute(exclusao)
-        data = cursor.fetchall()
-
-        # Insere os valores na lista
-        for dt in data:
-            lista_dados.append(dt)
-
-        # Verifica se o filme existe
-        if len(lista_dados) == 0:
-            print(f"Filme com o id {id_filme} não encontrado.")
-        else:
-            # Cria a instrução de exclusão
-            exclusao = f"""DELETE FROM FILMES WHERE ID_FILME = {id_filme}"""
-
-            # Executa a instrução SQL de exclusão
-            cursor.execute(exclusao)
-            conn.commit()
+        conn.commit()
     except ValueError:
         print("Valor inválido.")
     except Exception as erro:
@@ -186,16 +181,12 @@ while conexao:
     match escolha:
         case 1:
             cadastrar()
-            break
         case 2:
             listar()
-            break
         case 3:
             atualizar()
-            break
         case 4:
             excluir()
-            break
         case 5:
             print("Saindo...")
             break
