@@ -115,6 +115,46 @@ def atualizar():
         input("Pressione Enter para continuar...")
 
 
+def excluir():
+    try:
+        print("-----------------Excluir Filme-----------------")
+
+        # Lista para captura de dados da tabela
+        lista_dados = []
+
+        # Permite o usuário escolher o filme a ser excluído pelo id
+        id_filme = int(input("Informe o ID do Filme: "))
+
+        # Constroi a instrução de exclusão
+        exclusao = f"""DELETE FROM FILMES WHERE ID_FILME = {id_filme}"""
+
+        # Executa a exclusão
+        cursor.execute(exclusao)
+        data = cursor.fetchall()
+
+        # Insere os valores na lista
+        for dt in data:
+            lista_dados.append(dt)
+
+        # Verifica se o filme existe
+        if len(lista_dados) == 0:
+            print(f"Filme com o id {id_filme} não encontrado.")
+        else:
+            # Cria a instrução de exclusão
+            exclusao = f"""DELETE FROM FILMES WHERE ID_FILME = {id_filme}"""
+
+            # Executa a instrução SQL de exclusão
+            cursor.execute(exclusao)
+            conn.commit()
+    except ValueError:
+        print("Valor inválido.")
+    except Exception as erro:
+        print(f"Erro: {erro}")
+    else:
+        print("Filme excluído com sucesso.")
+        input("Pressione Enter para continuar...")
+
+
 # Tentativa de Conexão com o Banco de Dados
 
 try:
