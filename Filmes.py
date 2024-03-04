@@ -20,6 +20,35 @@ except Exception as erro:
 else:
     conexao = True    # Flag para executar a Aplicação
 
+
+
+# Enquanto a flag conexao estiver True, a aplicação será executada
+while conexao:
+    print("1 - Cadastrar Filme")
+    print("2 - Listar Filmes")
+    print("3 - Atualizar Filme")
+    print("4 - Excluir Filme")
+    print("5 - Sair")
+    escolha = int(input("Escolha uma opção: "))
+
+    match escolha:
+        case 1:
+            cadastrar()
+            break
+        case 2:
+            listar()
+            break
+        case 3:
+            atualizar()
+            break
+        case 4:
+            excluir()
+            break
+        case 5:
+            print("Saindo...")
+            break
+        case _:
+            print("Opção Inválida.")
     
 
             
