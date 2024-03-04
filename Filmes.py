@@ -3,6 +3,7 @@ import pwinput
 import oracledb
 
 def cadastrar():
+
     try:
         print("-----------------Cadastrar Filme-----------------")
 
@@ -28,6 +29,7 @@ def cadastrar():
 
 
 def listar():
+
     try:
         print("-----------------Listar Filme-----------------")
 
@@ -57,6 +59,58 @@ def listar():
                 print(item)
     except:
         print("Erro ao listar filmes.")
+    else:
+        input("Pressione Enter para continuar...")
+
+
+def atualizar():
+
+    try:
+        print("-----------------Atualizar Filme-----------------")
+
+        # Lista para captura de dados da tabela
+        lista_dados = []
+
+        # Permite o usuário escolher o filme a ser atualizado pelo id
+        id_filme = int(input("Informe o ID do Filme: "))
+
+        # Constroi a instrução de consulta para verificar se o filme existe
+        consulta = f"""SELECT * FROM FILMES WHERE ID_FILME = {id_filme}"""
+
+        # Captura os registros da tabela
+        cursor.execute(consulta)
+        data = cursor.fetchall()
+
+        # Preenche a lista com os registros
+        for dt in data:
+            lista_dados.append(dt)
+
+        # Verifica se o filme existe
+            if len(lista_dados) == 0:
+                print(f"Filme com o id {id_filme} não encontrado.")
+            else:
+                # Captura os novos valores para atualização
+                genero_novo = input("Digite um novo gênero: ")
+                nome_novo = input("Digite um novo nome: ")
+                dt_lancamento_novo = input("Digite uma nova data de lançamento (dd/mm/aaaa): ")
+                duracao_novo = int(input("Digite uma nova duração: "))
+
+                # Constroi a instrução de atualização
+                atualizacao = f"""UPDATE FILMES SET 
+                GENERO_FILME = '{genero_novo}',
+                NOME_FILME = '{nome_novo}',
+                DT_LANCAMENTO = TO_DATE('{dt_lancamento_novo}', 'YYYY-MM-DD'),
+                DURACAO = {duracao_novo} WHERE ID_FILME = {id_filme}"""
+
+                # Executa a atualização
+                cursor.execute(atualizacao)
+                conn.commit()
+
+                print("Filme atualizado com sucesso.")
+    except ValueError:
+        print("Valor inválido.")
+    except Exception as erro:
+        print(f"Erro: {erro}")
     else:
         input("Pressione Enter para continuar...")
 
